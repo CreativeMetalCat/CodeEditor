@@ -1,1 +1,26 @@
-<word name="int" color="blue"/>
+<root>
+  <word name="int" color="Blue" />
+  <word name="for" color="Blue" />
+  <word name="while" color="Blue" />
+  <word name="return" color="Blue" />
+  <word name="void" color="Blue" />
+  <word name="#include" color="LightSlateGray" />
+  <word name="namespace" color="Blue" />
+  <word name="class" color="Blue" />
+  <word name="#define" color="LightSlateGray" />
+  <word name="typedef" color="Blue" />
+  <word name="public" color="Blue" />
+  <word name="private" color="Blue" />
+  <word name="protected" color="Blue" />
+  <word name="struct" color="Blue" />
+  <word name="bool" color="Blue" />
+  <word name="true" color="Blue" />
+  <word name="false" color="Blue" />
+  <word name="float" color="Blue" />
+  <word name="template" color="Blue" />
+  <word name="static" color="Blue" />
+  <word name="this" color="Blue" />
+  <word name="virtual" color="Blue" />
+  <word name="NULL" color="BlueViolet" />
+  <word name="nullptr" color="Blue" />
+</root>
