@@ -1,81 +1,163 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.IO;
+using System;
+using System.ComponentModel;
 using System.Windows.Forms;
+using System.Xml;
 
-namespace CodeEditor
+namespace TemplateEditor
 {
     public partial class Form1 : Form
     {
-        Dictionary<string, Color> words = new Dictionary<string, Color>();
-        public Form1(Dictionary<string, Color> keys)
+        bool Saved = false;
+        string filename="";
+        public Form1()
         {
-            words= keys;
             InitializeComponent();
         }
-
-        private void Form1_Load(object sender, EventArgs e)
+        public Form1(string filename)
         {
-            
+            this.filename = filename;
+            InitializeComponent();
         }
-
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void Save(string Filename)
         {
-            for (int i=0;i<words.Count;i++)
+            XmlDocument doc = new XmlDocument();
+            XmlNode root = doc.CreateElement("root");
+            for (int i = 0; i < this.dataGridView1.RowCount; i++)
             {
-                CheckKeyword(words.Keys.ElementAt(i), words.Values.ElementAt(i),0);
-            }
-            //textBox1.Text = "";
-            //for(int i=0;i<richTextBox1.Lines.Length;i++)
-            //{
-            //    textBox1.Text += i + 1 + "\n";
-            //}
-        }
-        private void CheckKeyword(string Word,Color color,int StartIndex)
-        {
-            int Start = richTextBox1.SelectionStart;
-            richTextBox1.Select(Start, 0);
-            richTextBox1.SelectionColor = Color.Black;
-            if (richTextBox1.Text.Contains(Word))
-            {
-                if(richTextBox1.Text.IndexOf(Word,0)!=-1)
+                if (dataGridView1.Rows[i].Cells[1].Value != null && dataGridView1.Rows[i].Cells[0].Value != null)
                 {
-                    richTextBox1.Select(richTextBox1.Text.IndexOf(Word, 0),Word.Length);
-                    richTextBox1.SelectionColor = color;
+                    XmlElement node = doc.CreateElement("word");
+                    XmlAttribute name = doc.CreateAttribute("name");
+                    name.Value = dataGridView1.Rows[i].Cells[0].Value.ToString();
+                    XmlAttribute color = doc.CreateAttribute("color");
+                    color.Value = dataGridView1.Rows[i].Cells[1].Value.ToString();
+
+                    node.Attributes.Append(name);
+                    node.Attributes.Append(color);
+                    root.AppendChild(node);
                 }
-                richTextBox1.Select(Start, 0);
-                richTextBox1.SelectionColor = Color.Black;
+            }
+            doc.AppendChild(root);
+            if (Filename == "")
+            {
+                saveFileDialog1.ShowDialog();
+                doc.Save(saveFileDialog1.FileName);
+            }
+            else
+            {
+                    doc.Save(Filename);
             }
         }
-
-        private void colorSettinsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Save()
         {
+            XmlDocument doc = new XmlDocument();
+            XmlNode root = doc.CreateElement("root");
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                if (dataGridView1.Rows[i].Cells[1].Value != null && dataGridView1.Rows[i].Cells[0].Value != null)
+                {
+                    XmlElement node = doc.CreateElement("word");
+                    XmlAttribute name = doc.CreateAttribute("name");
+                    name.Value = dataGridView1.Rows[i].Cells[0].Value.ToString();
+                    XmlAttribute color = doc.CreateAttribute("color");
+                    color.Value = dataGridView1.Rows[i].Cells[1].Value.ToString();
 
+                    node.Attributes.Append(name);
+                    node.Attributes.Append(color);
+                    root.AppendChild(node);
+                }
+            }
+            doc.AppendChild(root);
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName != "")
+            {
+                doc.Save(saveFileDialog1.FileName);
+            }
+        }
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Save(filename);
         }
 
-        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            fontDialog1.ShowDialog();
-            richTextBox1.Font = fontDialog1.Font;
+
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
-            richTextBox1.Text = File.ReadAllText(openFileDialog1.FileName);
+            XmlDocument doc = new XmlDocument();
+            doc.Load(openFileDialog1.FileName);
+            XmlNode root = doc.DocumentElement;
+            foreach (XmlNode node in root)
+            {
+                dataGridView1.Rows.Add();
+                if (((dataGridView1.RowCount) >= 0))
+                {
+                    if (node.Attributes.GetNamedItem("name") != null && node.Attributes.GetNamedItem("color") != null)
+                    {
+                        dataGridView1.Rows.Add(new object[] { node.Attributes.GetNamedItem("name").Value, node.Attributes.GetNamedItem("color").Value });
+                    }
+                }
+            }
+            filename = openFileDialog1.FileName;
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            saveFileDialog1.ShowDialog();
-            richTextBox1.SaveFile(saveFileDialog1.FileName, RichTextBoxStreamType.PlainText);
+
         }
 
-        private void newToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void Form1_Load(object sender, EventArgs e)
         {
-            richTextBox1.Text = "";
+            if (filename != "")
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.Load(filename);
+                XmlNode root = doc.DocumentElement;
+                foreach (XmlNode node in root)
+                {
+                    dataGridView1.Rows.Add();
+                    if (((dataGridView1.RowCount) >= 0))
+                    {
+                        if (node.Attributes.GetNamedItem("name") != null && node.Attributes.GetNamedItem("color") != null)
+                        {
+                            dataGridView1.Rows.Add(new object[] { node.Attributes.GetNamedItem("name").Value, node.Attributes.GetNamedItem("color").Value });
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(Saved==false)
+            {
+                DialogResult res = MessageBox.Show("Do you want to save?", "File isn't saved",MessageBoxButtons.YesNoCancel);
+                if(res==DialogResult.Yes)
+                {
+                    if (filename != "") Save(filename);
+                    else Save();
+                }
+                if(res==DialogResult.No)
+                {
+
+                }
+                if(res==DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Save();
+        }
+
+        private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
         }
     }
 }
