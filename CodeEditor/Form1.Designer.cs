@@ -1,4 +1,4 @@
-﻿namespace CodeEditor
+namespace CodeEditor
 {
     partial class Form1
     {
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -37,12 +38,14 @@
             this.colorSettinsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTemplateEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.findTemplateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.styleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,7 +107,8 @@
             // 
             this.colorSettinsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changeToolStripMenuItem,
-            this.openTemplateEditorToolStripMenuItem});
+            this.openTemplateEditorToolStripMenuItem,
+            this.findTemplateToolStripMenuItem});
             this.colorSettinsToolStripMenuItem.Name = "colorSettinsToolStripMenuItem";
             this.colorSettinsToolStripMenuItem.Size = new System.Drawing.Size(113, 20);
             this.colorSettinsToolStripMenuItem.Text = "Template Settings";
@@ -121,6 +125,13 @@
             this.openTemplateEditorToolStripMenuItem.Name = "openTemplateEditorToolStripMenuItem";
             this.openTemplateEditorToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.openTemplateEditorToolStripMenuItem.Text = "Open Template Editor";
+            // 
+            // findTemplateToolStripMenuItem
+            // 
+            this.findTemplateToolStripMenuItem.Name = "findTemplateToolStripMenuItem";
+            this.findTemplateToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.findTemplateToolStripMenuItem.Text = "Find Template";
+            this.findTemplateToolStripMenuItem.Click += new System.EventHandler(this.findTemplateToolStripMenuItem_Click);
             // 
             // styleToolStripMenuItem
             // 
@@ -152,6 +163,12 @@
             this.textBox1.TabIndex = 3;
             this.textBox1.Visible = false;
             // 
+            // openFileDialog2
+            // 
+            this.openFileDialog2.DefaultExt = "lct";
+            this.openFileDialog2.FileName = "openFileDialog2";
+            this.openFileDialog2.Filter = "Template Files|*.lct";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,9 +177,11 @@
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -187,6 +206,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.ToolStripMenuItem findTemplateToolStripMenuItem;
+        private System.Windows.Forms.OpenFileDialog openFileDialog2;
     }
 }
-
