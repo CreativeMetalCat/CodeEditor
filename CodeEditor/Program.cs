@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Xml;
+using System.IO;
 using System.Windows.Forms;
 
 namespace CodeEditor
@@ -16,28 +17,51 @@ namespace CodeEditor
         /// <returns>Dictionary with color for special words</returns>
         static Dictionary<string,Color> LoadColorTemplate(string Filename)
         {
-            Dictionary<string, Color> res = new Dictionary<string, Color>();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(Filename);
-            XmlElement root = doc.DocumentElement;
-            foreach (XmlNode node in root)
+            try
             {
-                if(node.Attributes.GetNamedItem("name") != null && node.Attributes.GetNamedItem("color").Value != null)
+                Dictionary<string, Color> res = new Dictionary<string, Color>();
+                XmlDocument doc = new XmlDocument();
+                doc.Load(Filename);
+                XmlElement root = doc.DocumentElement;
+                foreach (XmlNode node in root)
                 {
-                    res.Add(node.Attributes.GetNamedItem("name").Value, Color.FromName(node.Attributes.GetNamedItem("color").Value));
+                    if (node.Attributes.GetNamedItem("name") != null && node.Attributes.GetNamedItem("color").Value != null)
+                    {
+                        res.Add(node.Attributes.GetNamedItem("name").Value, Color.FromName(node.Attributes.GetNamedItem("color").Value));
+                    }
                 }
+                return res;
             }
-            return res;
+            catch (System.IO.FileNotFoundException)
+            {
+                return new Dictionary<string, Color>();
+            }
         }
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(LoadColorTemplate("c_t_a.lct")));
+            if(args.Length!=0)
+            {
+                if(File.Exists(args[0]))
+                {
+                    Application.Run(new Form1(LoadColorTemplate(Settings.Default.TemplateFile),args[0]));
+                }
+                else
+                {
+                    Application.Run(new Form1(LoadColorTemplate(Settings.Default.TemplateFile)));
+                }
+            }
+            else
+            {
+                Application.Run(new Form1(LoadColorTemplate(Settings.Default.TemplateFile)));
+            }
+           
         }
     }
 }
