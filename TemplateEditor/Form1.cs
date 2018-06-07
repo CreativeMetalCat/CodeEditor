@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Xml;
@@ -18,7 +18,7 @@ namespace TemplateEditor
             this.filename = filename;
             InitializeComponent();
         }
-        private void Save(string filename)
+        private void Save(string Filename)
         {
             XmlDocument doc = new XmlDocument();
             XmlNode root = doc.CreateElement("root");
@@ -38,17 +38,21 @@ namespace TemplateEditor
                 }
             }
             doc.AppendChild(root);
-            if (filename == "")
+            if (Filename == "")
             {
                 saveFileDialog1.ShowDialog();
-                doc.Save(filename);
+                doc.Save(saveFileDialog1.FileName);
+            }
+            else
+            {
+                    doc.Save(Filename);
             }
         }
         private void Save()
         {
             XmlDocument doc = new XmlDocument();
             XmlNode root = doc.CreateElement("root");
-            for (int i = 0; i < this.dataGridView1.RowCount; i++)
+            for (int i = 0; i < dataGridView1.RowCount; i++)
             {
                 if (dataGridView1.Rows[i].Cells[1].Value != null && dataGridView1.Rows[i].Cells[0].Value != null)
                 {
@@ -64,9 +68,9 @@ namespace TemplateEditor
                 }
             }
             doc.AppendChild(root);
-            if (filename == "")
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName != "")
             {
-                saveFileDialog1.ShowDialog();
                 doc.Save(saveFileDialog1.FileName);
             }
         }
@@ -97,6 +101,7 @@ namespace TemplateEditor
                     }
                 }
             }
+            filename = openFileDialog1.FileName;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -149,6 +154,10 @@ namespace TemplateEditor
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Save();
+        }
+
+        private void dataGridView1_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
         }
     }
 }
