@@ -23,4 +23,9 @@
   <word name="virtual" color="Blue" />
   <word name="NULL" color="BlueViolet" />
   <word name="nullptr" color="Blue" />
+  <word name="if" color="Blue" />
+  <word name="else" color="Blue" />
+  <word name="using" color="Blue" />
+  <word name="#else" color="LightSlateGray" />
+  <word name="#if" color="LightSlateGray" />
 </root>
