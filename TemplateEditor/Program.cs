@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 using System.IO;
 
@@ -29,8 +29,6 @@ namespace TemplateEditor
             {
                 Application.Run(new Form1());
             }
-
-
         }
     }
 }
